@@ -2,16 +2,13 @@ package com.github.api;
 
 
 import com.github.api.Pojo_Files.CreateRepository;
-import com.github.api.Pojo_Files.CreateRepositoryResponse;
+import com.github.api.Pojo_Files.OutcomeRepositoryResponse;
 import io.restassured.RestAssured;
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
 import org.junit.Assert;
-import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
@@ -22,32 +19,40 @@ public class Repository_Scenarios {
 
         RestAssured.baseURI = "https://api.github.com";
         PreemptiveBasicAuthScheme authScheme = new PreemptiveBasicAuthScheme();
-        authScheme.setUserName("PramatiImaginea");
+        authScheme.setUserName("pramatiimaginea");
         authScheme.setPassword("Sprinklr123");
         RestAssured.authentication = authScheme;
     }
 
     @Test
-    public void CreateRepository()  {
+    public void CreateRepositoryaAndListoutRepos()  {
 
         Random randomGenerator = new Random();
-        System.out.println(randomGenerator.nextInt(10000));
         int value = randomGenerator.nextInt(10000);
 
         CreateRepository payload = new CreateRepository();
         payload.setName(value);
-        System.out.println(payload.getName());
-        CreateRepositoryResponse response  = given()
+        System.out.println("Repo Need to be Created:"+payload.getName());
+        OutcomeRepositoryResponse response  = given()
                 .header("content-type", "application/json")
                 .body(payload)
                 .when()
                 .post("/user/repos")
-        .as(CreateRepositoryResponse.class);
+            .as(OutcomeRepositoryResponse.class);
 
-        System.out.println(response.getId());
-        System.out.println(response.getName());
-        Assert.assertEquals(payload.getName(),response.getName());
+        Assert.assertEquals("Expected Name and Actual Name is Not Same",payload.getName(),response.getName());
 
+        OutcomeRepositoryResponse[] listResponse = given()
+                .header("content-type", "application/json")
+                .body(payload)
+                .when()
+                .get("/user/repos")
+                .as(OutcomeRepositoryResponse[].class);
+
+        for(OutcomeRepositoryResponse repoResponse : listResponse){
+            System.out.println("ID   :"+repoResponse.getId());
+            System.out.println("Name :"+repoResponse.getName());
+        }
 
     }
 
