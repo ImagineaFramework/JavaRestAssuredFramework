@@ -15,15 +15,16 @@ public class BasicAuthenticateGetUserDetails {
     public void setBaseUri () {
 
         RestAssured.baseURI = "https://api.github.com";
+        PreemptiveBasicAuthScheme authScheme = new PreemptiveBasicAuthScheme();
+        authScheme.setUserName("PramatiImaginea");
+        authScheme.setPassword("Sprinklr123");
+        RestAssured.authentication = authScheme;
     }
 
     @Test
     public void getGitExample()  {
 
-        PreemptiveBasicAuthScheme authScheme = new PreemptiveBasicAuthScheme();
-        authScheme.setUserName("PramatiImaginea");
-        authScheme.setPassword("Sprinklr123");
-        RestAssured.authentication = authScheme;
+
 
         Response response  = given()
                 .header("content-type", "application/json")
