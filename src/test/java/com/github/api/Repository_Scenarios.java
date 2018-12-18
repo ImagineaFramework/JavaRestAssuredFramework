@@ -1,7 +1,7 @@
 package com.github.api;
 
 
-import com.github.api.Pojo_Files.CreateRepository;
+import com.github.api.Pojo_Files.CreateAndModifyRepository;
 import com.github.api.Pojo_Files.OutcomeRepositoryResponse;
 import io.restassured.RestAssured;
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
@@ -25,14 +25,16 @@ public class Repository_Scenarios {
     }
 
     @Test
-    public void CreateRepositoryaAndListoutRepos()  {
+    public void CreateRepositoryaAndListoutReposAndEdit()  {
 
         Random randomGenerator = new Random();
         int value = randomGenerator.nextInt(10000);
 
-        CreateRepository payload = new CreateRepository();
-        payload.setName(value);
+        CreateAndModifyRepository payload = new CreateAndModifyRepository();
+        payload.setName(String.valueOf(value));
         System.out.println("Repo Need to be Created:"+payload.getName());
+
+        // Below Code will create Repo
         OutcomeRepositoryResponse response  = given()
                 .header("content-type", "application/json")
                 .body(payload)
@@ -42,17 +44,34 @@ public class Repository_Scenarios {
 
         Assert.assertEquals("Expected Name and Actual Name is Not Same",payload.getName(),response.getName());
 
+        // Below Code will List Repos Present
         OutcomeRepositoryResponse[] listResponse = given()
                 .header("content-type", "application/json")
-                .body(payload)
                 .when()
                 .get("/user/repos")
                 .as(OutcomeRepositoryResponse[].class);
-
+        System.out.println("Length of Response   :"+listResponse.length);
         for(OutcomeRepositoryResponse repoResponse : listResponse){
             System.out.println("ID   :"+repoResponse.getId());
             System.out.println("Name :"+repoResponse.getName());
         }
+
+        CreateAndModifyRepository modifyPayload = new CreateAndModifyRepository();
+        modifyPayload.setName(value+"Modified");
+        System.out.println("Repo Need to be Modified with this name:"+modifyPayload.getName());
+
+        // Below Code will modify Repo which created in first step
+        OutcomeRepositoryResponse modifyResponse  = given()
+                .header("content-type", "application/json")
+                .body(modifyPayload)
+                .when()
+                .patch("/repos/pramatiimaginea/"+payload.getName())
+                .as(OutcomeRepositoryResponse.class);
+
+        System.out.println("Modified Response Name is :"+modifyResponse.getName());
+
+
+        Assert.assertEquals("Verified Modified Name is not Present",modifyPayload.getName(),modifyResponse.getName());
 
     }
 

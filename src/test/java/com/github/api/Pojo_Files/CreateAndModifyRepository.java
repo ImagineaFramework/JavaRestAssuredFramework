@@ -1,6 +1,6 @@
 package com.github.api.Pojo_Files;
 
-public class CreateRepository {
+public class CreateAndModifyRepository {
         private String has_issues;
 
         private String has_projects;
@@ -50,7 +50,7 @@ public class CreateRepository {
             return name;
         }
 
-        public void setName (int value)
+        public void setName (String value)
         {
             name = "Repo_created"+value;
             this.name = name;
