@@ -5,7 +5,9 @@ import com.github.api.Pojo_Files.CreateAndModifyRepository;
 import com.github.api.Pojo_Files.OutcomeRepositoryResponse;
 import io.restassured.RestAssured;
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
+import io.restassured.response.Response;
 import org.junit.Assert;
+import org.omg.CORBA.TIMEOUT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -25,7 +27,7 @@ public class Repository_Scenarios {
     }
 
     @Test
-    public void CreateRepositoryaAndListoutReposAndEdit()  {
+    public void CreateRepositoryAndListoutReposAndEdit()  {
 
         Random randomGenerator = new Random();
         int value = randomGenerator.nextInt(10000);
@@ -74,5 +76,43 @@ public class Repository_Scenarios {
         Assert.assertEquals("Verified Modified Name is not Present",modifyPayload.getName(),modifyResponse.getName());
 
     }
+
+    @Test
+    public void CreateRepositoryAndDeleteRepository()  {
+
+        Random randomGenerator = new Random();
+        int value = randomGenerator.nextInt(10000);
+
+        CreateAndModifyRepository payload = new CreateAndModifyRepository();
+        payload.setName(String.valueOf(value));
+        System.out.println("Repo Need to be Created:"+payload.getName());
+
+        // Below Code will create Repo
+        OutcomeRepositoryResponse response  = given()
+                .header("content-type", "application/json")
+                .body(payload)
+                .when()
+                .post("/user/repos")
+                .as(OutcomeRepositoryResponse.class);
+
+        Assert.assertEquals("Expected Name and Actual Name is Not Same",payload.getName(),response.getName());
+
+        // Below Code will Delete Repo which created in first step
+
+        System.out.println("Repo Need to be Deleted:"+payload.getName());
+        Response resp  = given()
+                .when()
+                .delete("repos/pramatiimaginea/"+response.getName())
+                .then()
+                .statusCode(204)
+                .extract().response();
+
+//        System.out.println("Modified Response Name is :"+modifyResponse.getName());
+
+
+//        Assert.assertEquals("Verified Modified Name is not Present",modifyPayload.getName(),modifyResponse.getName());
+
+    }
+
 
 }
