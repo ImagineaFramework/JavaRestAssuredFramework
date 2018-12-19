@@ -23,9 +23,6 @@ public class BasicAuthenticateGetUserDetails {
 
     @Test
     public void getGitExample()  {
-
-
-
         Response response  = given()
                 .header("content-type", "application/json")
                 .when()
