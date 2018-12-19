@@ -1,0 +1,11 @@
+<!--
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Sample Test Suite" verbose="1" >
+    <parameter name="param_one" value="First parameter" />
+    <parameter name="param_two" value="Second parameter" />
+    <test name="ListOrgRepo" >
+        <classes>
+            <class name="com.github.api.ListOrganizationRepoTest" />
+        </classes>
+    </test>
+</suite>-->
