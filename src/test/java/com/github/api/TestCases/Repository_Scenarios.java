@@ -1,31 +1,21 @@
-package com.github.api;
-
-
+package com.github.api.TestCases;
 import com.github.api.Pojo_Files.CreateAndModifyRepository;
 import com.github.api.Pojo_Files.OutcomeRepositoryResponse;
+import com.github.utils.ServerUtils;
 import io.restassured.RestAssured;
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
 import io.restassured.response.Response;
 import org.junit.Assert;
-import org.omg.CORBA.TIMEOUT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.*;
+import java.util.Properties;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 
-public class Repository_Scenarios {
-    @BeforeClass
-    public void setBaseUri () {
-
-        RestAssured.baseURI = "https://api.github.com";
-        PreemptiveBasicAuthScheme authScheme = new PreemptiveBasicAuthScheme();
-        authScheme.setUserName("pramatiimaginea");
-        authScheme.setPassword("Sprinklr123");
-        RestAssured.authentication = authScheme;
-    }
-
+public class Repository_Scenarios extends ServerUtils {
     @Test
     public void CreateRepositoryAndListoutReposAndEdit()  {
 

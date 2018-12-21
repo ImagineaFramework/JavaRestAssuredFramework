@@ -1,4 +1,4 @@
-package com.github.api;
+package com.github.api.TestCases;
 
 //import io.restassured.RestAssured;
 import io.restassured.RestAssured;
